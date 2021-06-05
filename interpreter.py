@@ -1,4 +1,5 @@
 from nodes import *
+from tokens import Token, TokenType
 
 class Interpreter:
 
@@ -26,3 +27,26 @@ class Interpreter:
             return self.evalHelper(ast.node)
         elif isinstance(ast, NegativeNode):
             return -self.evalHelper(ast.node)
+
+def postfix_eval(tokens):
+    stack = []
+    for t in tokens:
+        if t.type == TokenType.PLUS:
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, a + b))
+        elif t.type == TokenType.MINUS:
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, b - a))
+        elif t.type == TokenType.MULTIPLY:
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, a * b))
+        elif t.type == TokenType.DIVIDE:
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, a / b))
+        else:
+            stack.append(t)
+    return stack[0].value
