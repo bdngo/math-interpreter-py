@@ -223,5 +223,5 @@ class TestInterpreter(unittest.TestCase):
         val = interpreter.eval()
         self.assertAlmostEqual(val, -2360.08, 2)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
