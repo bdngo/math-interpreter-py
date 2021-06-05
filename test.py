@@ -1,10 +1,11 @@
+from interpreter import Interpreter
 from nodes import *
 from parser_ import Parser
 from tokens import Token, TokenType
 from lexer import Lexer
 import unittest
 
-class TestParser(unittest.TestCase):
+class TestLexer(unittest.TestCase):
 
     def test_empty(self):
         lexer = Lexer("")
@@ -157,6 +158,70 @@ class TestParser(unittest.TestCase):
                     NumberNode(48)),
             NumberNode(51)))
         self.assertEqual(ast, tree)
+
+class TestInterpreter(unittest.TestCase):
+
+    def test_number(self):
+        ast = NumberNode(123.456)
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertEqual(val, 123.456)
+
+    def test_add(self):
+        ast = AddNode(NumberNode(1), NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertEqual(val, 3)
+
+    def test_sub(self):
+        ast = SubtractNode(NumberNode(1), NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertEqual(val, -1)
+
+    def test_mult(self):
+        ast = MultiplyNode(NumberNode(1), NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertEqual(val, 2)
+
+    def test_divide(self):
+        ast = DivideNode(NumberNode(1), NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertAlmostEqual(val, 0.5)
+
+    def test_pos(self):
+        ast = PositiveNode(NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertAlmostEqual(val, 2)
+
+    def test_neg(self):
+        ast = NegativeNode(NumberNode(2))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertAlmostEqual(val, -2)
+
+    def test_div_zero(self):
+        ast = DivideNode(NumberNode(1), NumberNode(0))
+        interpreter = Interpreter(ast)
+        with self.assertRaises(ZeroDivisionError):
+            interpreter.eval()
+
+    def test_full(self):
+        ast = AddNode(
+            NumberNode(27),
+            MultiplyNode(
+                SubtractNode(
+                    DivideNode(
+                        NumberNode(43),
+                        NumberNode(36)),
+                    NumberNode(48)),
+            NumberNode(51)))
+        interpreter = Interpreter(ast)
+        val = interpreter.eval()
+        self.assertAlmostEqual(val, -2360.08, 2)
 
 if __name__ == '__main__':
     unittest.main()

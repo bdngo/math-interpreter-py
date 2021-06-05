@@ -11,6 +11,9 @@ while True:
         parser = Parser(tokens)
         ast = parser.parse()
 
+        if ast == None:
+            continue
+
         interpreter = Interpreter(ast)
         result = interpreter.eval()
         print(result)
