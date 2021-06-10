@@ -53,16 +53,16 @@ def postfix_eval(tokens):
         elif t.type == TokenType.DIVIDE:
             a = stack.pop().value
             b = stack.pop().value
-            stack.append(Token(TokenType.NUMBER, a / b))
+            stack.append(Token(TokenType.NUMBER, b / a))
         elif t.type == TokenType.MODULO:
             print(stack)
             a = stack.pop().value
             b = stack.pop().value
-            stack.append(Token(TokenType.NUMBER, a % b))
+            stack.append(Token(TokenType.NUMBER, b % a))
         elif t.type == TokenType.POWER:
             a = stack.pop().value
             b = stack.pop().value
-            stack.append(Token(TokenType.NUMBER, a ** b))
+            stack.append(Token(TokenType.NUMBER, b ** a))
         else:
             stack.append(t)
     return stack[0].value
