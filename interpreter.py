@@ -23,6 +23,13 @@ class Interpreter:
             if eval_b == 0:
                 raise ZeroDivisionError("Cannot divide by zero")
             return self.evalHelper(ast.node_a) / eval_b
+        elif isinstance(ast, ModuloNode):
+            eval_b = self.evalHelper(ast.node_b)
+            if eval_b == 0:
+                raise ZeroDivisionError("Cannot divide by zero")
+            return self.evalHelper(ast.node_a) % eval_b
+        elif isinstance(ast, PowerNode):
+            return self.evalHelper(ast.node_a) ** self.evalHelper(ast.node_b)
         elif isinstance(ast, PositiveNode):
             return self.evalHelper(ast.node)
         elif isinstance(ast, NegativeNode):
@@ -47,6 +54,15 @@ def postfix_eval(tokens):
             a = stack.pop().value
             b = stack.pop().value
             stack.append(Token(TokenType.NUMBER, a / b))
+        elif t.type == TokenType.MODULO:
+            print(stack)
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, a % b))
+        elif t.type == TokenType.POWER:
+            a = stack.pop().value
+            b = stack.pop().value
+            stack.append(Token(TokenType.NUMBER, a ** b))
         else:
             stack.append(t)
     return stack[0].value

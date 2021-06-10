@@ -8,8 +8,10 @@ class TokenType(Enum):
     MINUS    = 2
     MULTIPLY = 3
     DIVIDE   = 4
-    L_PAREN  = 5
-    R_PAREN  = 6
+    MODULO   = 5
+    POWER    = 6
+    L_PAREN  = 7
+    R_PAREN  = 8
 
 @dataclass
 class Token:

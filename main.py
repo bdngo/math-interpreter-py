@@ -17,7 +17,6 @@ def main():
                 val = infix_shell(tokens)
                 if val == None:
                     continue
-
                 print(val)
         except Exception as e:
             print(e)

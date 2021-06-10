@@ -23,9 +23,9 @@ class Parser:
 
         if self.curr_token != None:
             self.bad_syntax()
-        
+
         return result
-        
+
     def expr(self):
         result = self.term()
 
@@ -40,15 +40,28 @@ class Parser:
         return result
 
     def term(self):
-        result = self.factor()
+        result = self.exponent()
 
-        while self.curr_token != None and self.curr_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
+        while self.curr_token != None and self.curr_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO):
             if self.curr_token.type == TokenType.MULTIPLY:
                 self.advance()
-                result = MultiplyNode(result, self.factor())
+                result = MultiplyNode(result, self.exponent())
             elif self.curr_token.type == TokenType.DIVIDE:
                 self.advance()
-                result = DivideNode(result, self.factor())
+                result = DivideNode(result, self.exponent())
+            elif self.curr_token.type == TokenType.MODULO:
+                self.advance()
+                result = ModuloNode(result, self.exponent())
+
+        return result
+
+    def exponent(self):
+        result = self.factor()
+
+        while self.curr_token != None and self.curr_token.type == TokenType.POWER:
+            if self.curr_token.type == TokenType.POWER:
+                self.advance()
+                result = PowerNode(result, self.factor())
 
         return result
 

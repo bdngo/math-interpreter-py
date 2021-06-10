@@ -12,7 +12,7 @@ class Lexer:
             self.curr_char = next(self.text)
         except StopIteration:
             self.curr_char = None
-    
+
     def generate_tokens(self):
         while self.curr_char != None:
             if self.curr_char.isspace():
@@ -31,6 +31,12 @@ class Lexer:
             elif self.curr_char == '/':
                 self.advance()
                 yield Token(TokenType.DIVIDE)
+            elif self.curr_char == '%':
+                self.advance()
+                yield Token(TokenType.MODULO)
+            elif self.curr_char == '^':
+                self.advance()
+                yield Token(TokenType.POWER)
             elif self.curr_char == '(':
                 self.advance()
                 yield Token(TokenType.L_PAREN)
@@ -50,10 +56,10 @@ class Lexer:
                 dec_pts += 1
                 if dec_pts > 1:
                     break
-            
+
             num += self.curr_char
             self.advance()
-            
+
         if num.startswith('.'):
             num = '0' + num
         if num.endswith('.'):
