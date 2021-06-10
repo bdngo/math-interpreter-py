@@ -1,4 +1,4 @@
-from tokens import TokenType
+from tokens import Token, TokenType
 from nodes import *
 
 class Parser:
@@ -88,3 +88,27 @@ class Parser:
             return NegativeNode(self.factor())
 
         self.bad_syntax()
+
+def shunting_yard(tokens):
+    op_stack = []
+    out_queue = []
+    for t in tokens:
+        if t.type == TokenType.NUMBER:
+            out_queue.append(t)
+        elif t.type in (TokenType.PLUS, TokenType.MINUS):
+            while op_stack != [] and op_stack[-1].type in (TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO, TokenType.POWER):
+                out_queue.append(op_stack.pop())
+            op_stack.append(t)
+        elif t.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
+            while op_stack != [] and op_stack[-1].type == TokenType.POWER:
+                out_queue.append(op_stack.pop())
+            op_stack.append(t)
+        elif t.type == TokenType.POWER:
+            op_stack.append(t)
+        elif t.type == TokenType.L_PAREN:
+            op_stack.append(t)
+        elif t.type == TokenType.R_PAREN:
+            while op_stack != [] and op_stack[-1].type != TokenType.L_PAREN:
+                out_queue.append(op_stack.pop())
+            op_stack.pop()
+    return out_queue + list(reversed(op_stack))
