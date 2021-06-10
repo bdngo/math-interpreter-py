@@ -1,6 +1,6 @@
 from interpreter import Interpreter
 from nodes import *
-from parser_ import Parser
+from parser_ import Parser, shunting_yard
 from tokens import Token, TokenType
 from lexer import Lexer
 import unittest
@@ -131,6 +131,26 @@ class TestParser(unittest.TestCase):
         parser = Parser(tokens)
         ast = parser.parse()
         self.assertEqual(ast, NegativeNode(NumberNode(2)))
+
+    def test_shunting(self):
+        tokens = [
+            Token(TokenType.L_PAREN),
+            Token(TokenType.NUMBER, 3),
+            Token(TokenType.PLUS),
+            Token(TokenType.NUMBER, 4),
+            Token(TokenType.R_PAREN),
+            Token(TokenType.MULTIPLY),
+            Token(TokenType.NUMBER, 5)
+        ]
+        shunting = shunting_yard(tokens)
+        expected = [
+            Token(TokenType.NUMBER, 3),
+            Token(TokenType.NUMBER, 4),
+            Token(TokenType.PLUS),
+            Token(TokenType.NUMBER, 5),
+            Token(TokenType.MULTIPLY)
+        ]
+        self.assertEqual(shunting, expected)
 
     def test_full(self):
         tokens = [
