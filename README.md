@@ -17,7 +17,7 @@ $ python3 main.py [-h] [--postfix | -b {recursive,shunting}] [-t] [-a]
 Flags:
 
 - `-h`: displays a help message
-- `--postfix`: sets the calculator to postfix evaluation mode (i.e. \(3 + 4 \cdot 5 \to 3 \ 4 \ 5 \cdot + \))
+- `--postfix`: sets the calculator to postfix evaluation mode (i.e. 3 + 4 * 5 -> 3 4 5 * +)
 - `-b | --backend {recursive, shunting}`: choose between a direct recursive backend or shunting-yard to postfix backend for parsing infix expressions
 - `-t`: print out the result of the lexer
 - `-a`: print out the result of the parser, ignored in postfix mode
